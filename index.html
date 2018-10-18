@@ -1,0 +1,198 @@
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+    <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+    <style>
+        body {
+			background-color: #000000;
+			color: #888;
+		}
+		.btn-xl {
+			padding: 10px 20px;
+			margin: 15px;
+			font-size: 20px;
+			border-radius: 10px;
+			width:40%;
+			height:20%;
+		}
+		.top-buffer { margin-top:36px; }
+		.btn-bottom { position: fixed; bottom: 50px; right: 0px; }
+		.top-right { position: fixed; top: 5px; right: 0px; }
+    .overlay { position: absolute; top: 0px; right: 0px; height: 100%; width: 100%; background-color: rgba(0, 0, 0, 0.8); z-index: 9998; display: none; }
+    #hadouken { 
+		  width:100%; height: 200px;
+		  padding: 0px;
+		  margin: 0px;
+		  text-shadow: 3px 3px 0 #000,
+					  -1px -1px 0 #000,  
+					  1px -1px 0 #000,
+					  -1px 1px 0 #000,
+					  1px 1px 0 #000;
+		  
+		  color: #ddd;
+		  font-size: 175%;
+		  background-color: #888;
+		  background: radial-gradient(#ddf 5%, #444 25%, black 70%);
+     }
+	 .inside-text {
+		font-size: 100%;
+		color: #8c8;
+	 }
+	 .vote-count {
+		position: absolute;
+		z-index: 9999;
+	 }
+	 #div-result {
+		position: relative;
+		top: 30px;
+	 }
+	</style>
+</head>
+
+<body>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <div class="container">
+        <div class="row top-buffer"></div>
+        <div class="row top-buffer"></div>
+        <div class="row">
+            <div class="col-xs-2 col-md-10 col-md-offset-2">
+                <button type="button" class="vote-up btn btn-xl btn-success fa fa-thumbs-up" data-loading-text=" ... ">&nbsp;成功
+                </button>
+                <button type="button" class="vote-down btn btn-xl btn-danger fa fa-bomb" data-loading-text=" ... ">&nbsp;失败
+                </button>
+            </div>
+        </div>
+        <div class="row top-buffer"></div>
+        <div class="row">
+            <div class="col-xs-2 col-md-10 col-md-offset-2">
+                <button type="button" class="vote-down btn btn-xl btn-danger fa fa-bomb" data-loading-text=" ... ">&nbsp;失败
+                </button>
+                <button type="button" class="vote-up btn btn-xl btn-success fa fa-thumbs-up" data-loading-text=" ... ">&nbsp;成功
+                </button>
+            </div>
+        </div>
+        <div class="row top-buffer"></div>
+        <div class="row vote-count">
+            <div class="col-xs-2 col-md-10 col-md-offset-2">
+                <span>已投票人数：</span>
+                <span id="ppl-cnt">0</span>
+            </div>
+        </div>
+        <div class="row top-buffer"></div>
+        <div class="row" style="display:none" id="div-result">
+            <div class="col-xs-12 col-md-12 col-md-offset-2">
+                <span id="result-detailed"></span>
+            </div>
+        </div>
+        <div class="row top-buffer"></div>
+        <div class="row top-buffer"></div>
+        <div class="row top-buffer"></div>
+        <div class="row" style="display:none" id="div-reset">
+            <div class="top-right">
+                <button type="button" id="btn-reset" class="btn btn-primary fa fa-trash">&nbsp;重置</button>
+            </div>
+        </div>
+        <div class="row top-buffer"></div>
+        <div class="row">
+            <div class="btn-bottom">
+                <button type="button" id="btn-result" class="btn btn-info fa fa-bicycle" data-loading-text=" ... ">&nbsp;查看结果
+                </button>
+            </div>
+        </div>
+        <div class="overlay">
+            <div class="row">
+                <div class="col-xs-2 col-md-10 col-md-offset-2">
+                    <button type="button" class="btn btn-xl fa fa-check" id="hadouken">
+                        &nbsp;已投票，<br>
+                        &nbsp;请交至下一玩家<br>
+                    </button>
+                    <div class="col-xs-2 col-md-10 text-center">
+                        <span class="inside-text">&nbsp;点触屏幕任意地方以继续</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript">
+    var ppl_cnt = 0
+    var vote_up = 0
+    var vote_down = 0
+
+    $("button[class^='vote-']").click(function() {
+        ppl_cnt += 1;
+        $('#ppl-cnt').text(ppl_cnt);
+        $('#ppl-cnt').animate({ fontSize: '0%', lineHeight: '0px' }, 250)
+            .animate({ fontSize: '250%', lineHeight: '20px' }, 250)
+            .animate({ fontSize: '100%', lineHeight: '20px' }, 500);
+        $('#div-reset').show();
+        $(this).blur();
+    });
+
+    $('.vote-up').click(function() {
+        var btn = $(this);
+        vote_up++
+        shouryuken();
+    });
+
+    $('.vote-down').click(function() {
+        var btn = $(this);
+        vote_down++
+        shouryuken();
+    });
+
+    $('#hadouken').click(function() {
+        $('.overlay').fadeOut(100);
+        $("button[class^='vote-']").css('visibility', 'visible');
+    });
+    $('.overlay').click(function() {
+        $('.overlay').fadeOut(100);
+        $("button[class^='vote-']").css('visibility', 'visible');
+    });
+
+    $('#btn-result').click(function() {
+        if (ppl_cnt > 0) {
+            $('#div-result').show();
+            $('#div-reset').show();
+
+            var text = '结果：';
+            if (vote_down > 0) {
+                text += '<span class="text-danger">有' + vote_down + '人破坏。'
+            } else {
+                text += '<span class="text-success">无人破坏</span>。'
+
+            }
+            $('#result-detailed').html(text);
+            $('#btn-result').prop("disabled", true);
+            $("button[class^='vote-']").prop("disabled", true);
+        }
+    });
+
+    $('#btn-reset').click(function() {
+        $('#div-result').hide();
+        ppl_cnt = 0;
+        vote_up = 0;
+        vote_down = 0;
+        $('#ppl-cnt').text(ppl_cnt);
+        $('#div-reset').hide();
+        $('#btn-result').prop("disabled", false);
+        $("button[class^='vote-']").prop("disabled", false);
+    });
+
+    function shouryuken() {
+        $('.overlay').show(250);
+        $("button[class^='vote-']").prop("disabled", true);
+        $("button[class^='vote-']").css('visibility', 'hidden');
+        setTimeout(function() {
+            $("button[class^='vote-']").prop("disabled", false);
+        }, 500);
+    }
+    </script>
+</body>
+
+</html>

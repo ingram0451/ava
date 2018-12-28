@@ -91,6 +91,8 @@
             <div class="col-xs-2 col-md-10 col-md-offset-2">
                 <span>已投票人数：</span>
                 <span id="ppl-cnt">0</span>
+				<br>
+				<span id="ex-used-on"></span>
             </div>
         </div>
         <div class="row top-buffer"></div>
@@ -195,6 +197,7 @@
 				+ ex_target +'位投票的玩家投出的是： '
 				+ result_text + '<br>该结果现在将变为： ' + result_text_alt + '</span><br>'
 				+ '<p><span class="text-info">看清结果后请关闭该窗口</span>');
+			$('#ex-used-on').html("第" + ex_target + "位投票的队员被大宝剑了");
 			$('.btn-excli').attr('disabled','disabled');
 			$('#btn-use-excli').prop("disabled", true);
 			$('#btn-activate-excli').prop("disabled", true);
@@ -211,14 +214,16 @@
     $('.vote-up').click(function() {
         var btn = $(this);
 		vote_list[ppl_cnt] = 1;
-		$('#vote-set').append('<label class="btn btn-info label-excli"><input type="radio" class="btn-excli" name="vote-set-btn" id="member_' + ppl_cnt + '" data-key="' + ppl_cnt + '" data-value="1">' + ppl_cnt + '</label>');
+		$('#vote-set').append('<label class="btn btn-info label-excli"><input type="radio" class="btn-excli" name="vote-set-btn" data-key="' 
+			+ ppl_cnt + '" data-value="1">' + ppl_cnt + '</label>');
         shouryuken();
     });
 
     $('.vote-down').click(function() {
         var btn = $(this);
 		vote_list[ppl_cnt] = 0;
-		$('#vote-set').append('<label class="btn btn-info label-excli"><input type="radio" class="btn-excli" name="vote-set-btn" id="member_' + ppl_cnt + '" data-key="' + ppl_cnt + '" data-value="0">' + ppl_cnt + '</label>');
+		$('#vote-set').append('<label class="btn btn-info label-excli"><input type="radio" class="btn-excli" name="vote-set-btn" data-key="' 
+			+ ppl_cnt + '" data-value="0">' + ppl_cnt + '</label>');
         shouryuken();
     });
 
@@ -272,6 +277,7 @@
         $("button[class^='vote-']").prop("disabled", false);
 		$('#vote-set').html("");
 		$('#ex-result').html("");
+		$('#ex-used-on').html("");
 		$('#btn-activate-excli').prop("disabled", false);
 		$('#btn-use-excli').prop("disabled", false);
     });

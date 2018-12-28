@@ -198,6 +198,7 @@
 			$('.btn-excli').attr('disabled','disabled');
 			$('#btn-use-excli').prop("disabled", true);
 			$('#btn-activate-excli').prop("disabled", true);
+			$("button[class^='vote-']").prop("disabled", true);
 		}
     });
 	
@@ -237,11 +238,8 @@
 			
 			var vote_up = 0
 			var vote_down = 0
-			
-			console.log(vote_list)
 			for (var key in vote_list) {
 				var value = vote_list[key];
-				console.log(key, value);
 				if (value == 1) {
 					vote_up++
 				} else {
@@ -261,7 +259,6 @@
             $('#btn-result').prop("disabled", true);
             $('#btn-activate-excli').prop("disabled", true);
             $("button[class^='vote-']").prop("disabled", true);
-			console.log(vote_list);
         }
     });
 

@@ -21,8 +21,17 @@
 			width:40%;
 			height:20%;
 		}
+		.btn-excli {
+			padding: 20px 15px;
+			margin: 20px;
+			font-size: 25px;
+			border-radius: 15px;
+			width:20%;
+			height:10%;
+		}
 		.top-buffer { margin-top:36px; }
 		.btn-bottom { position: fixed; bottom: 50px; right: 0px; }
+		.btn-bottom-left { position: fixed; bottom: 50px; left: 5px; }
 		.top-right { position: fixed; top: 5px; right: 0px; }
     .overlay { position: absolute; top: 0px; right: 0px; height: 100%; width: 100%; background-color: rgba(0, 0, 0, 0.8); z-index: 9998; display: none; }
     #hadouken { 
@@ -100,6 +109,9 @@
         </div>
         <div class="row top-buffer"></div>
         <div class="row">
+			<div class="btn-bottom-left">
+				<button type="button" id="btn-activate-excli" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">使用EX咖喱棒</button>
+			</div>
             <div class="btn-bottom">
                 <button type="button" id="btn-result" class="btn btn-info fa fa-bicycle" data-loading-text=" ... ">&nbsp;查看结果
                 </button>
@@ -118,11 +130,40 @@
                 </div>
             </div>
         </div>
+		
+		<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+		  <div class="modal-dialog" role="document">
+			<div class="modal-content">
+			  <div class="modal-header">
+				<h5 class="modal-title" id="exampleModalLabel">对一名队员查看结果并使用圣剑</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+				  <span aria-hidden="true">&times;</span>
+				</button>
+			  </div>
+			  <div class="modal-body">
+				<div class="btn-group-toggle" id="vote-set"></div>
+				<div class="row" id="ex-result"></div>
+			  </div>
+			  <div class="modal-footer">
+				<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+				<button type="button" class="btn btn-primary" id="btn-use-excli">Use</button>
+			  </div>
+			</div>
+		  </div>
+		</div>
+
     </div>
     <script type="text/javascript">
+	/**
+		0 = shi bai
+		1 = cheng gong
+	*/
     var ppl_cnt = 0
-    var vote_up = 0
-    var vote_down = 0
+	var vote_list = [];
+	var ex_used = 0
+	var ex_target = 0;
+	var ex_target_value = 0;
+	
 
     $("button[class^='vote-']").click(function() {
         ppl_cnt += 1;
@@ -133,16 +174,50 @@
         $('#div-reset').show();
         $(this).blur();
     });
+	
+    $("#btn-use-excli").click(function() {
+		if (ex_target < 1) {
+			$('#ex-result').html('<span class="text-info">请先选择一名队员</span>');
+		} else {
+			var result_text;
+			var result_text_alt;
+			
+			if (ex_target_value == 1) {
+				result_text = '行动成功';
+				result_text_alt = '行动失败';
+				vote_list[ex_target] = 0;
+			} else {
+				result_text = '行动失败';
+				result_text_alt = '行动成功';
+				vote_list[ex_target] = 1;
+			}
+			$('#ex-result').html('<span class="text-danger">第' 
+				+ ex_target +'位投票的玩家投出的是： '
+				+ result_text + '<br>该结果现在将变为： ' + result_text_alt + '</span><br>'
+				+ '<p><span class="text-info">看清结果后请关闭该窗口</span>');
+			$('.btn-excli').attr('disabled','disabled');
+			$('#btn-use-excli').prop("disabled", true);
+			$('#btn-activate-excli').prop("disabled", true);
+		}
+    });
+	
+	$('#vote-set').on('click', '.btn-excli', function (event) {
+		ex_target = $(this).data('key');
+		ex_target_value = $(this).data('value');
+	})
+
 
     $('.vote-up').click(function() {
         var btn = $(this);
-        vote_up++
+		vote_list[ppl_cnt] = 1;
+		$('#vote-set').append('<input type="radio" class="btn btn-info btn-excli" name="vote-set-btn" id="member_' + ppl_cnt + '" data-key="' + ppl_cnt + '" data-value="1">' + ppl_cnt + '</input>');
         shouryuken();
     });
 
     $('.vote-down').click(function() {
         var btn = $(this);
-        vote_down++
+		vote_list[ppl_cnt] = 0;
+		$('#vote-set').append('<input type="radio" class="btn btn-info btn-excli" name="vote-set-btn" id="member_' + ppl_cnt + '" data-key="' + ppl_cnt + '" data-value="0">' + ppl_cnt + '</input>');
         shouryuken();
     });
 
@@ -159,6 +234,20 @@
         if (ppl_cnt > 0) {
             $('#div-result').show();
             $('#div-reset').show();
+			
+			var vote_up = 0
+			var vote_down = 0
+			
+			console.log(vote_list)
+			for (var key in vote_list) {
+				var value = vote_list[key];
+				console.log(key, value);
+				if (value == 1) {
+					vote_up++
+				} else {
+					vote_down++
+				}
+			}
 
             var text = '结果：';
             if (vote_down > 0) {
@@ -167,21 +256,27 @@
                 text += '<span class="text-success">无人破坏</span>。'
 
             }
+
             $('#result-detailed').html(text);
             $('#btn-result').prop("disabled", true);
+            $('#btn-activate-excli').prop("disabled", true);
             $("button[class^='vote-']").prop("disabled", true);
+			console.log(vote_list);
         }
     });
 
     $('#btn-reset').click(function() {
         $('#div-result').hide();
         ppl_cnt = 0;
-        vote_up = 0;
-        vote_down = 0;
+		ex_target = 0;
         $('#ppl-cnt').text(ppl_cnt);
         $('#div-reset').hide();
         $('#btn-result').prop("disabled", false);
         $("button[class^='vote-']").prop("disabled", false);
+		$('#vote-set').html("");
+		$('#ex-result').html("");
+		$('#btn-activate-excli').prop("disabled", false);
+		$('#btn-use-excli').prop("disabled", false);
     });
 
     function shouryuken() {
@@ -192,6 +287,10 @@
             $("button[class^='vote-']").prop("disabled", false);
         }, 500);
     }
+	
+	
+	
+	
     </script>
 </body>
 

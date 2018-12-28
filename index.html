@@ -197,9 +197,10 @@
 				+ ex_target +'位投票的玩家投出的是： '
 				+ result_text + '<br>该结果现在将变为： ' + result_text_alt + '</span><br>'
 				+ '<p><span class="text-info">看清结果后请关闭该窗口</span>');
-			$('#ex-used-on').html("第" + ex_target + "位投票的队员被大宝剑了");
+			
 			$('.btn-excli').attr('disabled','disabled');
 			$('#btn-use-excli').prop("disabled", true);
+			$('#btn-activate-excli').html("第" + ex_target + "位投票的队员被大宝剑了");
 			$('#btn-activate-excli').prop("disabled", true);
 			$("button[class^='vote-']").prop("disabled", true);
 		}
@@ -280,6 +281,7 @@
 		$('#ex-used-on').html("");
 		$('#btn-activate-excli').prop("disabled", false);
 		$('#btn-use-excli').prop("disabled", false);
+		$('#btn-activate-excli').html("使用EX咖喱棒");
     });
 
     function shouryuken() {

@@ -21,7 +21,7 @@
 			width:40%;
 			height:20%;
 		}
-		.btn-excli {
+		.label-excli {
 			padding: 20px 15px;
 			margin: 20px;
 			font-size: 25px;
@@ -141,7 +141,7 @@
 				</button>
 			  </div>
 			  <div class="modal-body">
-				<div class="btn-group-toggle" id="vote-set"></div>
+				<div id="vote-set"></div>
 				<div class="row" id="ex-result"></div>
 			  </div>
 			  <div class="modal-footer">
@@ -211,14 +211,14 @@
     $('.vote-up').click(function() {
         var btn = $(this);
 		vote_list[ppl_cnt] = 1;
-		$('#vote-set').append('<input type="radio" class="btn btn-info btn-excli" name="vote-set-btn" id="member_' + ppl_cnt + '" data-key="' + ppl_cnt + '" data-value="1">' + ppl_cnt + '</input>');
+		$('#vote-set').append('<label class="btn btn-info label-excli"><input type="radio" class="btn-excli" name="vote-set-btn" id="member_' + ppl_cnt + '" data-key="' + ppl_cnt + '" data-value="1">' + ppl_cnt + '</label>');
         shouryuken();
     });
 
     $('.vote-down').click(function() {
         var btn = $(this);
 		vote_list[ppl_cnt] = 0;
-		$('#vote-set').append('<input type="radio" class="btn btn-info btn-excli" name="vote-set-btn" id="member_' + ppl_cnt + '" data-key="' + ppl_cnt + '" data-value="0">' + ppl_cnt + '</input>');
+		$('#vote-set').append('<label class="btn btn-info label-excli"><input type="radio" class="btn-excli" name="vote-set-btn" id="member_' + ppl_cnt + '" data-key="' + ppl_cnt + '" data-value="0">' + ppl_cnt + '</label>');
         shouryuken();
     });
 

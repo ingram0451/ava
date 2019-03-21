@@ -19,7 +19,7 @@
 			font-size: 20px;
 			border-radius: 10px;
 			width:40%;
-			height:20%;
+			height:22%;
 		}
 		.label-excli {
 			padding: 20px 15px;
@@ -30,37 +30,43 @@
 			height:10%;
 		}
 		.top-buffer { margin-top:36px; }
+		.btn-left { position: fixed; left: 10px; }
+		.btn-right { position: fixed; right: 10px; }
 		.btn-bottom { position: fixed; bottom: 50px; right: 0px; }
 		.btn-bottom-left { position: fixed; bottom: 50px; left: 5px; }
 		.top-right { position: fixed; top: 5px; right: 0px; }
-    .overlay { position: absolute; top: 0px; right: 0px; height: 100%; width: 100%; background-color: rgba(0, 0, 0, 0.8); z-index: 9998; display: none; }
-    #hadouken { 
-		  width:100%; height: 200px;
-		  padding: 0px;
-		  margin: 0px;
-		  text-shadow: 3px 3px 0 #000,
+		.overlay { 
+			position: absolute; 
+			top: 0px; right: 0px; height: 100%; width: 100%; 
+			background-color: rgba(0, 0, 0, 0.8); z-index: 9998; display: none; 
+		}
+		#hadouken { 
+			width:100%; height: 200px;
+			padding: 0px;
+			margin: 0px;
+			text-shadow: 3px 3px 0 #000,
 					  -1px -1px 0 #000,  
 					  1px -1px 0 #000,
 					  -1px 1px 0 #000,
 					  1px 1px 0 #000;
-		  
-		  color: #ddd;
-		  font-size: 175%;
-		  background-color: #888;
-		  background: radial-gradient(#ddf 5%, #444 25%, black 70%);
-     }
-	 .inside-text {
-		font-size: 100%;
-		color: #8c8;
-	 }
-	 .vote-count {
-		position: absolute;
-		z-index: 9999;
-	 }
-	 #div-result {
-		position: relative;
-		top: 30px;
-	 }
+
+			color: #ddd;
+			font-size: 175%;
+			background-color: #888;
+			background: radial-gradient(#ddf 5%, #444 25%, black 70%);
+		}
+		.inside-text {
+			font-size: 100%;
+			color: #8c8;
+		}
+		.vote-count {
+			position: absolute;
+			z-index: 9999;
+		}
+		#div-result {
+			position: relative;
+			top: 30px;
+		}
 	</style>
 </head>
 
@@ -69,23 +75,21 @@
     <div class="container">
         <div class="row top-buffer"></div>
         <div class="row top-buffer"></div>
+		<div class="row top-buffer"></div>
+		<div class="row top-buffer"></div>
+		<div class="row top-buffer"></div>
         <div class="row">
             <div class="col-xs-2 col-md-10 col-md-offset-2">
-                <button type="button" class="vote-up btn btn-xl btn-success fa fa-thumbs-up" data-loading-text=" ... ">&nbsp;成功
+                <button type="button" id="vote-up" class="btn btn-xl btn-success fa fa-thumbs-up" data-loading-text=" ... ">&nbsp;成功
                 </button>
-                <button type="button" class="vote-down btn btn-xl btn-danger fa fa-bomb" data-loading-text=" ... ">&nbsp;失败
+                <button type="button" id="vote-down" class="btn btn-xl btn-danger fa fa-bomb" data-loading-text=" ... ">&nbsp;失败
                 </button>
             </div>
         </div>
         <div class="row top-buffer"></div>
-        <div class="row">
-            <div class="col-xs-2 col-md-10 col-md-offset-2">
-                <button type="button" class="vote-down btn btn-xl btn-danger fa fa-bomb" data-loading-text=" ... ">&nbsp;失败
-                </button>
-                <button type="button" class="vote-up btn btn-xl btn-success fa fa-thumbs-up" data-loading-text=" ... ">&nbsp;成功
-                </button>
-            </div>
-        </div>
+        <div class="row top-buffer"></div>
+        <div class="row top-buffer"></div>
+        <div class="row top-buffer"></div>
         <div class="row top-buffer"></div>
         <div class="row vote-count">
             <div class="col-xs-2 col-md-10 col-md-offset-2">
@@ -119,6 +123,7 @@
                 </button>
             </div>
         </div>
+		
         <div class="overlay">
             <div class="row">
                 <div class="col-xs-2 col-md-10 col-md-offset-2">
@@ -167,7 +172,7 @@
 	var ex_target_value = 0;
 	
 
-    $("button[class^='vote-']").click(function() {
+    $("button[id^='vote-']").click(function() {
         ppl_cnt += 1;
         $('#ppl-cnt').text(ppl_cnt);
         $('#ppl-cnt').animate({ fontSize: '0%', lineHeight: '0px' }, 250)
@@ -202,7 +207,7 @@
 			$('#btn-use-excli').prop("disabled", true);
 			$('#btn-activate-excli').html("第" + ex_target + "位投票的队员被大宝剑了");
 			$('#btn-activate-excli').prop("disabled", true);
-			$("button[class^='vote-']").prop("disabled", true);
+			$("button[id^='vote-']").prop("disabled", true);
 		}
     });
 	
@@ -212,7 +217,7 @@
 	})
 
 
-    $('.vote-up').click(function() {
+    $('#vote-up').click(function() {
         var btn = $(this);
 		vote_list[ppl_cnt] = 1;
 		$('#vote-set').append('<label class="btn btn-info label-excli"><input type="radio" class="btn-excli" name="vote-set-btn" data-key="' 
@@ -220,7 +225,7 @@
         shouryuken();
     });
 
-    $('.vote-down').click(function() {
+    $('#vote-down').click(function() {
         var btn = $(this);
 		vote_list[ppl_cnt] = 0;
 		$('#vote-set').append('<label class="btn btn-info label-excli"><input type="radio" class="btn-excli" name="vote-set-btn" data-key="' 
@@ -230,11 +235,11 @@
 
     $('#hadouken').click(function() {
         $('.overlay').fadeOut(100);
-        $("button[class^='vote-']").css('visibility', 'visible');
+        $("button[id^='vote-']").css('visibility', 'visible');
     });
     $('.overlay').click(function() {
         $('.overlay').fadeOut(100);
-        $("button[class^='vote-']").css('visibility', 'visible');
+        $("button[id^='vote-']").css('visibility', 'visible');
     });
 
     $('#btn-result').click(function() {
@@ -264,7 +269,7 @@
             $('#result-detailed').html(text);
             $('#btn-result').prop("disabled", true);
             $('#btn-activate-excli').prop("disabled", true);
-            $("button[class^='vote-']").prop("disabled", true);
+            $("button[id^='vote-']").prop("disabled", true);
         }
     });
 
@@ -275,7 +280,7 @@
         $('#ppl-cnt').text(ppl_cnt);
         $('#div-reset').hide();
         $('#btn-result').prop("disabled", false);
-        $("button[class^='vote-']").prop("disabled", false);
+        $("button[id^='vote-']").prop("disabled", false);
 		$('#vote-set').html("");
 		$('#ex-result').html("");
 		$('#ex-used-on').html("");
@@ -285,13 +290,36 @@
     });
 
     function shouryuken() {
+		swap_vote_buttons();
         $('.overlay').show(250);
-        $("button[class^='vote-']").prop("disabled", true);
-        $("button[class^='vote-']").css('visibility', 'hidden');
+        $("button[id^='vote-']").prop("disabled", true);
+        $("button[id^='vote-']").css('visibility', 'hidden');
         setTimeout(function() {
-            $("button[class^='vote-']").prop("disabled", false);
+            $("button[id^='vote-']").prop("disabled", false);
         }, 500);
     }
+	
+    function swap_vote_buttons() {
+		if (Math.random() > 0.5) {
+			if ($("#vote-up").attr('class').includes('btn-right')) {
+				$("#vote-up").toggleClass('btn-right btn-left');
+				$("#vote-down").toggleClass('btn-left btn-right');
+			} else {
+				$("#vote-up").toggleClass('btn-left btn-right');
+				$("#vote-down").toggleClass('btn-right btn-left');
+			}
+		}
+    }
+	
+	$(document).ready(function() {
+		if (Math.random() > 0.5) {
+			$("#vote-up").addClass('btn-right');
+			$("#vote-down").addClass('btn-left');
+		} else {
+			$("#vote-up").addClass('btn-left');
+			$("#vote-down").addClass('btn-right');
+		}
+	});
 	
 	
 	

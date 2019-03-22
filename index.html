@@ -68,6 +68,11 @@
 		#div-result {
 			top: 30px;
 		}
+		#anim {
+			position: fixed;
+			left: -200px;
+			z-index: 9999;
+		}
 	</style>
 </head>
 
@@ -83,6 +88,9 @@
 				<span id="ex-used-on"></span>
             </div>
         </div>
+		<div id="anim" style="display:none">
+			<img src="img/ryu-hurricane-loop.gif">
+		</div>
         <div class="row top-buffer"></div>
         <div class="row" style="display:none" id="div-result">
             <div class="col-xs-12 col-md-12 col-md-offset-2">
@@ -103,10 +111,6 @@
         <div class="row top-buffer"></div>
         <div class="row top-buffer"></div>
         <div class="row top-buffer"></div>
-        <div class="row top-buffer"></div>
-        <div class="row top-buffer"></div>
-        <div class="row top-buffer"></div>
-
         <div class="row top-buffer"></div>
         <div class="row top-buffer"></div>
         <div class="row top-buffer"></div>
@@ -264,8 +268,8 @@
             if (vote_down > 0) {
                 text += '<span class="text-danger">有' + vote_down + '人破坏。'
             } else {
-                text += '<span class="text-success">无人破坏</span>。'
-
+                text += '<span class="text-success">无人破坏</span>。';
+				play_anim();
             }
 
             $('#result-detailed').html(text);
@@ -314,6 +318,18 @@
 		}
     }
 	
+	function play_anim() {
+		$("#anim").show();
+		$("#anim").animate( {
+			'left': '100%'
+			}, 2500, function() {
+				$("#anim").hide();
+				$("#anim").animate({
+					'left' : '-200px'
+				}, 1000)
+		});
+	}
+
 	$(document).ready(function() {
 		if (Math.random() > 0.5) {
 			$("#vote-up").addClass('btn-right');

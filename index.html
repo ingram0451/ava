@@ -171,7 +171,7 @@
 		0 = shi bai
 		1 = cheng gong
 	*/
-    var ppl_cnt = 0
+    	var ppl_cnt = 0
 	var vote_list = [];
 	var ex_used = 0
 	var ex_target = 0;
@@ -281,9 +281,13 @@
 
     $('#btn-reset').click(function() {
         $('#div-result').hide();
-		swap_vote_buttons();
+	swap_vote_buttons();
+	vote_list = [];
         ppl_cnt = 0;
-		ex_target = 0;
+	ex_target = 0;
+	ex_used = 0
+	ex_target_value = 0;
+	    
         $('#ppl-cnt').text(ppl_cnt);
         $('#div-reset').hide();
         $('#btn-result').prop("disabled", false);

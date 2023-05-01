@@ -10,344 +10,347 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
     <style>
         body {
-			background-color: #000000;
-			color: #888;
-		}
-		.btn-xl {
-			padding: 10px 20px;
-			margin: 15px;
-			font-size: 20px;
-			border-radius: 10px;
-			width:40%;
-			height:22%;
-		}
-		.label-excli {
-			padding: 20px 15px;
-			margin: 20px;
-			font-size: 25px;
-			border-radius: 15px;
-			width:20%;
-			height:10%;
-		}
-		.top-buffer { margin-top:36px; }
-		.center {  position: fixed; top: 25%;}
-		.btn-left { position: fixed; left: 10px; top: 40%;}
-		.btn-right { position: fixed; right: 10px; top: 40%;}
-		.btn-bottom { position: fixed; bottom: 50px; right: 0px; }
-		.btn-bottom-left { position: fixed; bottom: 50px; left: 5px; }
-		.top-right { position: fixed; top: 5px; right: 0px; }
-		.overlay { 
-			position: absolute; 
-			top: 0; right: 0px; height: 100%; width: 100%; 
-			background-color: rgba(0, 0, 0, 0.8); z-index: 9998; display: none; 
-		}
-		#hadouken { 
-			width:100%; height: 200px;
-			padding: 0px;
-			margin: 0px;
-			text-shadow: 3px 3px 0 #000,
-					  -1px -1px 0 #000,  
-					  1px -1px 0 #000,
-					  -1px 1px 0 #000,
-					  1px 1px 0 #000;
+      background-color: #000000;
+      color: #888;
+    }
+    .btn-xl {
+      padding: 10px 20px;
+      margin: 15px;
+      font-size: 20px;
+      border-radius: 10px;
+      width:40%;
+      height:22%;
+    }
+    .label-excli {
+      padding: 20px 15px;
+      margin: 20px;
+      font-size: 25px;
+      border-radius: 15px;
+      width:20%;
+      height:10%;
+    }
+    .top-buffer { margin-top:36px; }
+    .center {  position: fixed; top: 25%;}
+    .btn-left { position: fixed; left: 10px; top: 40%;}
+    .btn-right { position: fixed; right: 10px; top: 40%;}
+    .btn-bottom { position: fixed; bottom: 50px; right: 0px; }
+    .btn-bottom-left { position: fixed; bottom: 50px; left: 5px; }
+    .top-right { position: fixed; top: 5px; right: 0px; }
+    .overlay { 
+      position: absolute; 
+      top: 0; right: 0px; height: 100%; width: 100%; 
+      background-color: rgba(0, 0, 0, 0.8); z-index: 9998; display: none; 
+    }
+    #hadouken { 
+      width:100%; height: 200px;
+      padding: 0px;
+      margin: 0px;
+      text-shadow: 3px 3px 0 #000,
+            -1px -1px 0 #000,  
+            1px -1px 0 #000,
+            -1px 1px 0 #000,
+            1px 1px 0 #000;
 
-			color: #ddd;
-			font-size: 175%;
-			background-color: #888;
-			background: radial-gradient(#ddf 5%, #444 25%, black 70%);
-		}
-		.inside-text {
-			font-size: 100%;
-			color: #8c8;
-		}
-		.vote-count {
-			top: 2%;
-			position: absolute;
-			z-index: 9999;
-		}
-		#div-result {
-			top: 30px;
-		}
-		#anim {
-			position: fixed;
-			left: -200px;
-			z-index: 9999;
-		}
-	</style>
+      color: #ddd;
+      font-size: 175%;
+      background-color: #888;
+      background: radial-gradient(#ddf 5%, #444 25%, black 70%);
+    }
+    .inside-text {
+      font-size: 100%;
+      color: #8c8;
+    }
+    .vote-count {
+      top: 2%;
+      position: absolute;
+      z-index: 9999;
+    }
+    #div-result {
+      top: 30px;
+    }
+    #anim {
+      position: fixed;
+      left: -200px;
+      z-index: 9999;
+    }
+  </style>
 </head>
 
 <body>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <div class="container">
-        <div class="row top-buffer"></div>
-        <div class="row vote-count">
-            <div class="col-xs-2 col-md-10 col-md-offset-2">
-                <span>已投票人数：</span>
-                <span id="ppl-cnt">0</span>
-				<br>
-				<span id="ex-used-on"></span>
-            </div>
-        </div>
-		<div id="anim" style="display:none">
-			<img src="img/ryu-hurricane-loop.gif">
-		</div>
-        <div class="row top-buffer"></div>
-        <div class="row" style="display:none" id="div-result">
-            <div class="col-xs-12 col-md-12 col-md-offset-2">
-                <span id="result-detailed"></span>
-            </div>
-        </div>
-		<div class="row top-buffer"></div>
-		<div class="row top-buffer"></div>
-		<div class="row top-buffer"></div>
-        <div class="row">
-            <div class="col-xs-2 col-md-10 col-md-offset-2">
-                <button type="button" id="vote-up" class="btn btn-xl btn-success fa fa-thumbs-up" data-loading-text=" ... ">&nbsp;成功
-                </button>
-                <button type="button" id="vote-down" class="btn btn-xl btn-danger fa fa-bomb" data-loading-text=" ... ">&nbsp;失败
-                </button>
-            </div>
-        </div>
-        <div class="row top-buffer"></div>
-        <div class="row top-buffer"></div>
-        <div class="row top-buffer"></div>
-        <div class="row top-buffer"></div>
-        <div class="row top-buffer"></div>
-        <div class="row top-buffer"></div>
-        <div class="row" style="display:none" id="div-reset">
-            <div class="top-right">
-                <button type="button" id="btn-reset" class="btn btn-primary fa fa-trash">&nbsp;重置</button>
-            </div>
-        </div>
-        <div class="row top-buffer"></div>
-        <div class="row">
-			<div class="btn-bottom-left">
-				<button type="button" id="btn-activate-excli" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">使用EX咖喱棒</button>
-			</div>
-            <div class="btn-bottom">
-                <button type="button" id="btn-result" class="btn btn-info fa fa-bicycle" data-loading-text=" ... ">&nbsp;查看结果
-                </button>
-            </div>
-        </div>
-		
-        <div class="overlay">
-            <div class="row">
-                <div class="col-xs-2 col-md-10 col-md-offset-2 center">
-                    <button type="button" class="btn btn-xl fa fa-check" id="hadouken">
-                        &nbsp;已投票，<br>
-                        &nbsp;请交至下一玩家<br>
-                    </button>
-                    <div class="col-xs-2 col-md-10 text-center">
-                        <span class="inside-text">&nbsp;点触屏幕任意地方以继续</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-		
-		<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-		  <div class="modal-dialog" role="document">
-			<div class="modal-content">
-			  <div class="modal-header">
-				<h5 class="modal-title" id="exampleModalLabel">对一名队员查看结果并使用圣剑</h5>
-				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-				  <span aria-hidden="true">&times;</span>
-				</button>
-			  </div>
-			  <div class="modal-body">
-				<div id="vote-set"></div>
-				<div class="row" id="ex-result"></div>
-			  </div>
-			  <div class="modal-footer">
-				<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-				<button type="button" class="btn btn-primary" id="btn-use-excli">Use</button>
-			  </div>
-			</div>
-		  </div>
-		</div>
-
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <div class="container">
+  <div class="row top-buffer"></div>
+  <div class="row vote-count">
+    <div class="col-xs-2 col-md-10 col-md-offset-2">
+    <span>已投票人数：</span>
+    <span id="ppl-cnt">0</span>
+  <br>
+  <span id="ex-used-on"></span>
+      </div>
+  </div>
+  <div id="anim" style="display:none">
+    <img src="img/ryu-hurricane-loop.gif">
+  </div>
+      <div class="row top-buffer"></div>
+      <div class="row" style="display:none" id="div-result">
+          <div class="col-xs-12 col-md-12 col-md-offset-2">
+              <span id="result-detailed"></span>
+          </div>
+      </div>
+  <div class="row top-buffer"></div>
+  <div class="row top-buffer"></div>
+  <div class="row top-buffer"></div>
+      <div class="row">
+          <div class="col-xs-2 col-md-10 col-md-offset-2">
+              <button type="button" id="vote-up" class="btn btn-xl btn-success fa fa-thumbs-up" data-loading-text=" ... ">&nbsp;成功
+              </button>
+              <button type="button" id="vote-down" class="btn btn-xl btn-danger fa fa-bomb" data-loading-text=" ... ">&nbsp;失败
+              </button>
+          </div>
+      </div>
+      <div class="row top-buffer"></div>
+      <div class="row top-buffer"></div>
+      <div class="row top-buffer"></div>
+      <div class="row top-buffer"></div>
+      <div class="row top-buffer"></div>
+      <div class="row top-buffer"></div>
+      <div class="row" style="display:none" id="div-reset">
+          <div class="top-right">
+              <button type="button" id="btn-reset" class="btn btn-primary fa fa-trash">&nbsp;重置</button>
+          </div>
+      </div>
+      <div class="row top-buffer"></div>
+      <div class="row">
+    <div class="btn-bottom-left">
+      <button type="button" id="btn-activate-excli" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">使用EX咖喱棒</button>
     </div>
-    <script type="text/javascript">
-	/**
-		0 = shi bai
-		1 = cheng gong
-	*/
-    	var ppl_cnt = 0
-	var vote_list = [];
-	var ex_used = 0
-	var ex_target = 0;
-	var ex_target_value = 0;
-	
+          <div class="btn-bottom">
+              <button type="button" id="btn-result" class="btn btn-info fa fa-bicycle" data-loading-text=" ... ">&nbsp;查看结果
+              </button>
+          </div>
+      </div>
+  
+      <div class="overlay">
+          <div class="row">
+              <div class="col-xs-2 col-md-10 col-md-offset-2 center">
+                  <button type="button" class="btn btn-xl fa fa-check" id="hadouken">
+                      &nbsp;已投票，<br>
+                      &nbsp;请交至下一玩家<br>
+                  </button>
+                  <div class="col-xs-2 col-md-10 text-center">
+                      <span class="inside-text">&nbsp;点触屏幕任意地方以继续</span>
+                  </div>
+              </div>
+          </div>
+      </div>
+  
+  <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header" style="margin-top: 15px;">
+      <h5 class="modal-title" id="exampleModalLabel">对一名队员查看结果并使用圣剑</h5>
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+      </div>
+      <div class="modal-body">
+      <div id="vote-set"></div>
+      <div class="row" id="ex-result"></div>
+      </div>
+      <div class="modal-footer">
+      <button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
+      <button type="button" class="btn btn-primary" id="btn-use-excli">使用</button>
+      </div>
+    </div>
+    </div>
+  </div>
 
-    $("button[id^='vote-']").click(function() {
-        ppl_cnt += 1;
-        $('#ppl-cnt').text(ppl_cnt);
-        $('#ppl-cnt').animate({ fontSize: '0%', lineHeight: '0px' }, 250)
-            .animate({ fontSize: '250%', lineHeight: '20px' }, 250)
-            .animate({ fontSize: '100%', lineHeight: '20px' }, 500);
-        $('#div-reset').show();
-        $(this).blur();
-    });
-	
-    $("#btn-use-excli").click(function() {
-		if (ex_target < 1) {
-			$('#ex-result').html('<span class="text-info">请先选择一名队员</span>');
-		} else {
-			var result_text;
-			var result_text_alt;
-			
-			if (ex_target_value == 1) {
-				result_text = '行动成功';
-				result_text_alt = '行动失败';
-				vote_list[ex_target] = 0;
-			} else {
-				result_text = '行动失败';
-				result_text_alt = '行动成功';
-				vote_list[ex_target] = 1;
-			}
-			$('#ex-result').html('<span class="text-danger">第' 
-				+ ex_target +'位投票的玩家投出的是： '
-				+ result_text + '<br>该结果现在将变为： ' + result_text_alt + '</span><br>'
-				+ '<p><span class="text-info">看清结果后请关闭该窗口</span>');
-			
-			$('.btn-excli').attr('disabled','disabled');
-			$('#btn-use-excli').prop("disabled", true);
-			$('#btn-activate-excli').html("第" + ex_target + "位投票的队员被大宝剑了");
-			$('#btn-activate-excli').prop("disabled", true);
-			$("button[id^='vote-']").prop("disabled", true);
-		}
-    });
-	
-	$('#vote-set').on('click', '.btn-excli', function (event) {
-		ex_target = $(this).data('key');
-		ex_target_value = $(this).data('value');
-	})
+</div>
+<script type="text/javascript">
+/**
+  0 = shi bai
+  1 = cheng gong
+*/
+  var ppl_cnt = 0
+  var vote_list = [];
+  var ex_used = 0
+  var ex_target = 0;
+  var ex_target_value = 0;
 
 
-    $('#vote-up').click(function() {
-        var btn = $(this);
-		vote_list[ppl_cnt] = 1;
-		$('#vote-set').append('<label class="btn btn-info label-excli"><input type="radio" class="btn-excli" name="vote-set-btn" data-key="' 
-			+ ppl_cnt + '" data-value="1">' + ppl_cnt + '</label>');
+  $("button[id^='vote-']").click(function() {
+    ppl_cnt += 1;
+    $('#ppl-cnt').text(ppl_cnt);
+    $('#ppl-cnt').animate({ fontSize: '0%', lineHeight: '0px' }, 250)
+        .animate({ fontSize: '250%', lineHeight: '20px' }, 250)
+        .animate({ fontSize: '100%', lineHeight: '20px' }, 500);
+    $('#div-reset').show();
+    if (ppl_cnt > 1) {
+      $('#btn-activate-excli').prop("disabled", false);
+      $('#btn-result').prop("disabled", false);
+    }
+    $(this).blur();
+  });
+
+  $("#btn-use-excli").click(function() {
+    if (ex_target < 1) {
+      $('#ex-result').html('<span class="text-info">请先选择一名队员</span>');
+    } else {
+      var result_text;
+      var result_text_alt;
+      
+      if (ex_target_value == 1) {
+        result_text = '行动成功';
+        result_text_alt = '行动失败';
+        vote_list[ex_target] = 0;
+      } else {
+        result_text = '行动失败';
+        result_text_alt = '行动成功';
+        vote_list[ex_target] = 1;
+      }
+      $('#ex-result').html('<span class="text-danger">第' 
+        + ex_target +'位投票的玩家投出的是： '
+        + result_text + '<br>该结果现在将变为： ' + result_text_alt + '</span><br>'
+        + '<p><span class="text-info">看清结果后可关闭该窗口以继续</span>');
+      
+      $('.btn-excli').attr('disabled','disabled');
+      $('#btn-use-excli').prop("disabled", true);
+      $('#btn-activate-excli').html("第" + ex_target + "位投票的队员被大宝剑了");
+      $('#btn-activate-excli').prop("disabled", true);
+      $("button[id^='vote-']").prop("disabled", true);
+    }
+  });
+
+  $('#vote-set').on('click', '.btn-excli', function (event) {
+    ex_target = $(this).data('key');
+    ex_target_value = $(this).data('value');
+  })
+
+
+  $('#vote-up').click(function() {
+    var btn = $(this);
+    vote_list[ppl_cnt] = 1;
+    $('#vote-set').append('<label class="btn btn-info label-excli"><input type="radio" class="btn-excli" name="vote-set-btn" data-key="' 
+      + ppl_cnt + '" data-value="1">' + ppl_cnt + '</label>');
         shouryuken();
-    });
+  });
 
-    $('#vote-down').click(function() {
-        var btn = $(this);
-		vote_list[ppl_cnt] = 0;
-		$('#vote-set').append('<label class="btn btn-info label-excli"><input type="radio" class="btn-excli" name="vote-set-btn" data-key="' 
-			+ ppl_cnt + '" data-value="0">' + ppl_cnt + '</label>');
+  $('#vote-down').click(function() {
+    var btn = $(this);
+    vote_list[ppl_cnt] = 0;
+    $('#vote-set').append('<label class="btn btn-info label-excli"><input type="radio" class="btn-excli" name="vote-set-btn" data-key="' 
+      + ppl_cnt + '" data-value="0">' + ppl_cnt + '</label>');
         shouryuken();
-    });
+  });
 
-    $('#hadouken').click(function() {
-        $('.overlay').fadeOut(100);
-        $("button[id^='vote-']").css('visibility', 'visible');
-    });
-    $('.overlay').click(function() {
-        $('.overlay').fadeOut(100);
-        $("button[id^='vote-']").css('visibility', 'visible');
-    });
+  $('#hadouken').click(function() {
+      $('.overlay').fadeOut(100);
+      $("button[id^='vote-']").css('visibility', 'visible');
+  });
+  $('.overlay').click(function() {
+      $('.overlay').fadeOut(100);
+      $("button[id^='vote-']").css('visibility', 'visible');
+  });
 
-    $('#btn-result').click(function() {
-        if (ppl_cnt > 0) {
-            $('#div-result').show();
-            $('#div-reset').show();
-			
-			var vote_up = 0
-			var vote_down = 0
-			for (var key in vote_list) {
-				var value = vote_list[key];
-				if (value == 1) {
-					vote_up++
-				} else {
-					vote_down++
-				}
-			}
+  $('#btn-result').click(function() {
+    // there has to be at least 2 players have voted.
+    if (ppl_cnt < 2) {
+      return;
+    }
 
-            var text = '结果：';
-            if (vote_down > 0) {
-                text += '<span class="text-danger">有' + vote_down + '人破坏。'
-            } else {
-                text += '<span class="text-success">无人破坏</span>。';
-				play_anim();
-            }
+    $('#div-result').show();
+    $('#div-reset').show();
+    var vote_up = 0
+    var vote_down = 0
+    for (var key in vote_list) {
+      var value = vote_list[key];
+      if (value == 1) {
+        vote_up++
+      } else {
+        vote_down++
+      }
+    }
 
-            $('#result-detailed').html(text);
-            $('#btn-result').prop("disabled", true);
-            $('#btn-activate-excli').prop("disabled", true);
-            $("button[id^='vote-']").prop("disabled", true);
-        }
-    });
+    var text = '结果：';
+    if (vote_down > 0) {
+        text += '<span class="text-danger">有' + vote_down + '人破坏。'
+    } else {
+        text += '<span class="text-success">无人破坏</span>。';
+        play_anim();
+    }
 
-    $('#btn-reset').click(function() {
-        $('#div-result').hide();
-	swap_vote_buttons();
-	vote_list = [];
-        ppl_cnt = 0;
-	ex_target = 0;
-	ex_used = 0
-	ex_target_value = 0;
-	    
-        $('#ppl-cnt').text(ppl_cnt);
-        $('#div-reset').hide();
-        $('#btn-result').prop("disabled", false);
+    $('#result-detailed').html(text);
+    $('#btn-result').prop("disabled", true);
+    $('#btn-activate-excli').prop("disabled", true);
+    $("button[id^='vote-']").prop("disabled", true);
+    
+  });
+
+  $('#btn-reset').click(function() {
+    init_board();
+  });
+
+  function shouryuken() {
+    swap_vote_buttons();
+    $('.overlay').show(250);
+    $("button[id^='vote-']").prop("disabled", true);
+    $("button[id^='vote-']").css('visibility', 'hidden');
+    setTimeout(function() {
         $("button[id^='vote-']").prop("disabled", false);
-		$('#vote-set').html("");
-		$('#ex-result').html("");
-		$('#ex-used-on').html("");
-		$('#btn-activate-excli').prop("disabled", false);
-		$('#btn-use-excli').prop("disabled", false);
-		$('#btn-activate-excli').html("使用EX咖喱棒");
+    }, 500);
+  }
+
+  function swap_vote_buttons() {
+    if (Math.random() > 0.5) {
+      $("#vote-up").toggleClass('btn-right btn-left');
+      $("#vote-down").toggleClass('btn-right btn-left');
+    }
+  }
+
+  function play_anim() {
+    $("#anim").show();
+    $("#anim").animate( {
+      'left': '100%'
+      }, 2500, function() {
+        $("#anim").hide();
+        $("#anim").animate({
+          'left' : '-200px'
+        }, 1000)
     });
+  }
 
-    function shouryuken() {
-		swap_vote_buttons();
-        $('.overlay').show(250);
-        $("button[id^='vote-']").prop("disabled", true);
-        $("button[id^='vote-']").css('visibility', 'hidden');
-        setTimeout(function() {
-            $("button[id^='vote-']").prop("disabled", false);
-        }, 500);
-    }
-	
-    function swap_vote_buttons() {
-		if (Math.random() > 0.3) {
-			if ($("#vote-up").attr('class').includes('btn-right')) {
-				$("#vote-up").toggleClass('btn-right btn-left');
-				$("#vote-down").toggleClass('btn-left btn-right');
-			} else {
-				$("#vote-up").toggleClass('btn-left btn-right');
-				$("#vote-down").toggleClass('btn-right btn-left');
-			}
-		}
-    }
-	
-	function play_anim() {
-		$("#anim").show();
-		$("#anim").animate( {
-			'left': '100%'
-			}, 2500, function() {
-				$("#anim").hide();
-				$("#anim").animate({
-					'left' : '-200px'
-				}, 1000)
-		});
-	}
+  function init_board() {
+    $('#div-result').hide();
+    vote_list = [];
+    ppl_cnt = 0;
+    ex_target = 0;
+    ex_used = 0
+    ex_target_value = 0;
+        
+    $('#ppl-cnt').text(ppl_cnt);
+    $('#div-reset').hide();
+    $("button[id^='vote-']").prop("disabled", false);
+    $('#vote-set').html("");
+    $('#ex-result').html("");
+    $('#ex-used-on').html("");
+    $('#btn-activate-excli').prop("disabled", true);
+    $('#btn-result').prop("disabled", true);
+    $('#btn-use-excli').prop("disabled", false);
+    $('#btn-activate-excli').html("使用EX咖喱棒");
+  }
 
-	$(document).ready(function() {
-		if (Math.random() > 0.5) {
-			$("#vote-up").addClass('btn-right');
-			$("#vote-down").addClass('btn-left');
-		} else {
-			$("#vote-up").addClass('btn-left');
-			$("#vote-down").addClass('btn-right');
-		}
-	});
-	
-	
-	
-	
-    </script>
+  $(document).ready(function() {
+    init_board();
+    if (Math.random() > 0.5) {
+      $("#vote-up").addClass('btn-right');
+      $("#vote-down").addClass('btn-left');
+    } else {
+      $("#vote-up").addClass('btn-left');
+      $("#vote-down").addClass('btn-right');
+    }
+  });
+
+  </script>
 </body>
 
 </html>
